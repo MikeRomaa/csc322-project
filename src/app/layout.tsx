@@ -1,7 +1,9 @@
+import classNames from "classnames";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type React from "react";
 
+import { Navbar } from "@/app/Navbar";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -18,7 +20,10 @@ export default function RootLayout({
 }>) {
 	return (
 		<html lang="en">
-			<body className={inter.className}>{children}</body>
+			<body className={classNames(inter.className, "container mx-auto mt-10")}>
+				<Navbar />
+				<div className="pt-10">{children}</div>
+			</body>
 		</html>
 	);
 }

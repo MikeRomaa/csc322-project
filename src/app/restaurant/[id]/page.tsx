@@ -31,7 +31,7 @@ const ViewRestaurant: NextPage<Params> = async ({ params: { id } }) => {
 	const { name, address, city, state, zip, banner, menu } = restaurant;
 
 	return (
-		<main className="container mx-auto pt-10">
+		<main>
 			<Link href="/">
 				<span className="flex items-center gap-2 text-tremor-content">
 					<RiArrowLeftSLine />
