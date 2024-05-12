@@ -6,6 +6,7 @@ const CONFIG: PoolOptions = {
 	user: process.env.DB_USER,
 	password: process.env.DB_PASSWORD,
 	namedPlaceholders: true,
+	decimalNumbers: true,
 };
 
 export const pool = mysql.createPool(CONFIG).promise();
