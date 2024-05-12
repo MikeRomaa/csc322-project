@@ -1,7 +1,7 @@
 import argon2, { type Options as ArgonOptions } from "argon2";
 import type { ResultSetHeader, RowDataPacket } from "mysql2";
 
-import { pool } from "@/db/index";
+import { pool } from "@/db";
 
 // As per OWASP recommendations:
 // https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html
