@@ -13,7 +13,7 @@ export interface AuthCookie {
 
 export function encryptCookie(user: User): string {
 	const payload: AuthCookie = {
-		iat: new Date().getTime(),
+		iat: Math.floor(new Date().getTime() / 1000),
 		exp: 60 * 60 * 24,
 		user,
 	};
@@ -40,7 +40,7 @@ export function decryptCookie(cookie: string): User | null {
 
 	const payload: AuthCookie = JSON.parse(decrypted);
 
-	if (payload.iat + payload.exp < new Date().getTime()) {
+	if (payload.iat + payload.exp < Math.floor(new Date().getTime() / 1000)) {
 		return null;
 	}
 
