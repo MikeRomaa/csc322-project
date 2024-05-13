@@ -86,3 +86,36 @@ export async function insertOrder(
 	await connection.commit();
 	return order_id;
 }
+
+export interface Order extends RowDataPacket {
+	id: number;
+	restaurant: string;
+	timestamp: number;
+	status: "placed" | "picked_up" | "delivered" | "cancelled";
+	total: number;
+}
+
+/**
+ * Retrieve a user's orders by id.
+ */
+export async function getOrders(user_id: number): Promise<Order[]> {
+	const [res] = await pool.execute<Order[]>(
+		`SELECT
+            o.id AS id,
+            r.name AS restaurant,
+            o.timestamp AS timestamp,
+            o.status AS status,
+            (
+                SELECT SUM(price * quantity) AS subtotal
+                FROM order_item
+                WHERE order_id = o.id
+            ) * 1.0875 + IF(o.delivery_address IS NULL, 0, 5) AS total
+        FROM food_order AS o
+        JOIN restaurant AS r
+            ON r.id = o.restaurant_id
+        WHERE o.user_id = :user_id`,
+		{ user_id },
+	);
+
+	return res;
+}

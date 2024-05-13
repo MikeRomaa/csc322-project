@@ -5,14 +5,16 @@ import {
 	RiEditLine,
 	RiLogoutBoxLine,
 } from "@remixicon/react";
+import { Button } from "@tremor/react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
 
+import { getOrders } from "@/db/order";
 import { getBalance, getTransactions } from "@/db/user";
 import { getCurrentUser } from "@/utils/cookies";
-import { Button } from "@tremor/react";
+import { OrderHistory } from "./(orders)/OrderHistory";
 import { TransactionHistory } from "./(wallet)/TransactionHistory";
 
 const Profile: NextPage = async () => {
@@ -23,6 +25,8 @@ const Profile: NextPage = async () => {
 
 	const balance = await getBalance(user.id);
 	const transactions = await getTransactions(user.id);
+
+	const orders = await getOrders(user.id);
 
 	return (
 		<main>
@@ -56,8 +60,9 @@ const Profile: NextPage = async () => {
 				</Link>
 			</div>
 
-			<div className="grid grid-cols-2 gap-10">
+			<div className="grid grid-cols-2 gap-10 items-start">
 				<TransactionHistory balance={balance} transactions={transactions} />
+				<OrderHistory orders={orders} />
 			</div>
 		</main>
 	);

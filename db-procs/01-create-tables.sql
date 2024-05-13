@@ -72,8 +72,8 @@ CREATE TABLE food_order (
     restaurant_id    INT UNSIGNED NOT NULL,
     billing_address  INT UNSIGNED NOT NULL,
     delivery_address INT UNSIGNED NULL,
-    placed           TIMESTAMP    NOT NULL DEFAULT NOW(),
-    status           ENUM('placed', 'fulfilled', 'cancalled') NOT NULL DEFAULT 'placed',
+    timestamp        TIMESTAMP    NOT NULL DEFAULT NOW(),
+    status           ENUM('placed', 'picked_up', 'delivered', 'cancelled') NOT NULL DEFAULT 'placed',
 
     PRIMARY KEY (id),
     FOREIGN KEY (user_id)          REFERENCES user(id),
