@@ -5,6 +5,8 @@ SET character_set_connection=utf8mb4;
 
 
 /** BEGIN User Data */
+INSERT INTO user (id, first_name, last_name, email, password_hash)
+VALUES (1, 'Michael', 'Romashov', 'mromashov@icloud.com','$argon2id$v=19$m=65536,t=2,p=1$4Ob9SQ3VeS6rZSroOLErTA$RUdCzDFFbaEXc4V7PLn4n48hc7azqFc5Dksz1Xm7oHQ');
 /** END User Data */
 
 

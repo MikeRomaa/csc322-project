@@ -32,7 +32,9 @@ export interface MenuItem extends RowDataPacket {
 	thumbnail?: string;
 }
 
-export type RestaurantWithMenu = Restaurant & { menu: MenuItem[] };
+export type RestaurantWithMenu = Restaurant & {
+	menu: Record<number, MenuItem>;
+};
 
 /**
  * Retrieves restaurant with menu from database by id.
@@ -58,5 +60,8 @@ export async function getRestaurant(
 		{ id },
 	);
 
-	return { ...res[0], menu };
+	return {
+		...res[0],
+		menu: Object.fromEntries(menu.map((item) => [item.id, item])),
+	};
 }

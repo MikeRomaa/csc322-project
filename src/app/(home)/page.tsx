@@ -10,7 +10,7 @@ import {
 } from "@tremor/react";
 import type { NextPage } from "next";
 
-import { getRestaurants } from "@/db/restaurants";
+import { getRestaurants } from "@/db/restaurant";
 import { RiBookmarkFill, RiGlobalLine, RiStarFill } from "@remixicon/react";
 import { RestaurantCard } from "./RestaurantCard";
 
@@ -19,7 +19,7 @@ const Home: NextPage = async () => {
 
 	return (
 		<main>
-			<h1 className="text-tremor-content-emphasis text-tremor-title font-medium">
+			<h1 className="mb-1 text-tremor-content-emphasis text-tremor-title font-medium">
 				📍 Restaurants Near Me
 			</h1>
 			<p className="mb-5 text-tremor-content text-tremor-default">

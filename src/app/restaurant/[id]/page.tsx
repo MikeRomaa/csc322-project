@@ -8,8 +8,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
-import { getRestaurant } from "@/db/restaurants";
-import { MenuitemCard } from "./MenuItemCard";
+import { getRestaurant } from "@/db/restaurant";
+import { Menu } from "./Menu";
 
 interface Params {
 	params: { id: string };
@@ -23,7 +23,6 @@ const ViewRestaurant: NextPage<Params> = async ({ params: { id } }) => {
 	}
 
 	const restaurant = await getRestaurant(idNum);
-
 	if (restaurant === null) {
 		return notFound();
 	}
@@ -56,12 +55,7 @@ const ViewRestaurant: NextPage<Params> = async ({ params: { id } }) => {
 
 			<Divider />
 
-			<h3 className="mb-5 text-tremor-title font-medium">Menu</h3>
-			<div className="grid grid-cols-2 gap-5">
-				{menu.map((item) => (
-					<MenuitemCard key={item.id} {...item} />
-				))}
-			</div>
+			<Menu restaurant_id={idNum} items={menu} />
 		</main>
 	);
 };
