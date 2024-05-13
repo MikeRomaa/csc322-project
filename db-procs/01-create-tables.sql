@@ -95,3 +95,17 @@ CREATE TABLE order_item (
     FOREIGN KEY (dish_id)  REFERENCES dish(id)
 ) CHARACTER SET = utf8mb4;
 /** END Order Data */
+
+
+/** BEGIN Miscellaneous */
+CREATE TABLE saved_restaurant (
+    user_id       INT UNSIGNED NOT NULL,
+    restaurant_id INT UNSIGNED NOT NULL,
+    later         BOOLEAN      NOT NULL DEFAULT false,
+    favorite      BOOLEAN      NOT NULL DEFAULT false,
+
+    PRIMARY KEY (user_id, restaurant_id),
+    FOREIGN KEY (user_id)          REFERENCES user(id),
+    FOREIGN KEY (restaurant_id)    REFERENCES restaurant(id)
+) CHARACTER SET = utf8mb4;
+/** END Miscellaneous */

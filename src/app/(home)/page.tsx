@@ -1,19 +1,11 @@
 "use server";
 
-import { RiBookmarkFill, RiGlobalLine, RiStarFill } from "@remixicon/react";
-import {
-	MultiSelect,
-	MultiSelectItem,
-	Tab,
-	TabGroup,
-	TabList,
-	TextInput,
-} from "@tremor/react";
+import { MultiSelect, MultiSelectItem, TextInput } from "@tremor/react";
 import type { NextPage } from "next";
 
+import { Directory } from "@/app/(home)/Directory";
 import { getRestaurants } from "@/db/restaurant";
 import { getCurrentUser } from "@/utils/cookies";
-import { RestaurantCard } from "./RestaurantCard";
 
 const Home: NextPage = async () => {
 	const user = getCurrentUser();
@@ -37,34 +29,7 @@ const Home: NextPage = async () => {
 				</MultiSelect>
 			</div>
 
-			<TabGroup className="mb-5">
-				<TabList variant="line">
-					<Tab>
-						<div className="flex items-center gap-2">
-							<RiGlobalLine size={20} />
-							All
-						</div>
-					</Tab>
-					<Tab>
-						<div className="flex items-center gap-2">
-							<RiBookmarkFill size={20} />
-							Saved for Later
-						</div>
-					</Tab>
-					<Tab>
-						<div className="flex items-center gap-2">
-							<RiStarFill size={20} />
-							Favorites
-						</div>
-					</Tab>
-				</TabList>
-			</TabGroup>
-
-			<div className="grid grid-cols-2 gap-5">
-				{restaurants.map((restaurant) => (
-					<RestaurantCard key={restaurant.id} {...restaurant} />
-				))}
-			</div>
+			<Directory user={user} restaurants={restaurants} />
 		</main>
 	);
 };
