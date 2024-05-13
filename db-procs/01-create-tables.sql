@@ -24,6 +24,17 @@ CREATE TABLE address (
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES user(id)
 ) CHARACTER SET = utf8mb4;
+
+CREATE TABLE wallet_transaction (
+    id        INT UNSIGNED  NOT NULL AUTO_INCREMENT,
+    user_id   INT UNSIGNED  NOT NULL,
+    amount    DECIMAL(5, 2) NOT NULL,
+    notes     VARCHAR(128)  NOT NULL,
+    timestamp TIMESTAMP     NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user(id)
+) CHARACTER SET = utf8mb4;
 /** END User Data */
 
 
@@ -74,6 +85,7 @@ CREATE TABLE food_order (
 CREATE TABLE order_item (
     order_id INT UNSIGNED     NOT NULL,
     dish_id  INT UNSIGNED     NOT NULL,
+    price    DECIMAL(5,2)     NOT NULL,
     quantity TINYINT UNSIGNED NOT NULL,
 
     PRIMARY KEY (order_id, dish_id),

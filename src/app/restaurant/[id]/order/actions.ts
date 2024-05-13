@@ -33,5 +33,9 @@ export async function placeOrder(
 		items,
 	);
 
+	if (orderId === null) {
+		return { formError: "Insufficient balance" };
+	}
+
 	return { data: orderId };
 }

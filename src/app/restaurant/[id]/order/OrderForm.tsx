@@ -100,6 +100,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 		if (state.data) {
 			// TODO: Redirect to order history instead
 			router.push("/");
+			router.refresh();
 		}
 	}, [router, state]);
 
@@ -283,7 +284,6 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 									$
 									{(
 										subtotal * 1.0875 +
-										5 +
 										(deliveryType === DeliveryType.Delivery ? 5 : 0)
 									).toFixed(2)}
 								</span>
@@ -291,6 +291,12 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 						</List>
 					</Card>
 				</div>
+
+				{state.formError && (
+					<div className="mb-5 flex justify-end">
+						<small className="text-sm text-red-500">{state.formError}</small>
+					</div>
+				)}
 
 				<div className="flex justify-end gap-2">
 					<Link href={`/restaurant/${restaurant.id}`}>

@@ -1,10 +1,18 @@
+"use server";
+
+import { getBalance } from "@/db/user";
 import { getCurrentUser } from "@/utils/cookies";
-import { Button } from "@tremor/react";
+import { Badge, Button } from "@tremor/react";
 import Link from "next/link";
 import type React from "react";
 
-export const Navbar: React.FC = () => {
+export const Navbar: React.FC = async () => {
 	const session = getCurrentUser();
+
+	let balance = 0;
+	if (session) {
+		balance = await getBalance(session.id);
+	}
 
 	return (
 		<nav className="container mx-auto flex items-center gap-3">
@@ -15,9 +23,12 @@ export const Navbar: React.FC = () => {
 				</h1>
 			</Link>
 			{session ? (
-				<p>
-					{session.first_name} {session.last_name}
-				</p>
+				<Link href="/profile" className="flex items-center gap-2">
+					<p className="text-tremor-content-strong">
+						{session.first_name} {session.last_name}
+					</p>
+					<Badge>${balance.toFixed(2)}</Badge>
+				</Link>
 			) : (
 				<>
 					<Link href="/auth/sign-in">
