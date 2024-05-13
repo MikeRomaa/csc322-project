@@ -51,11 +51,6 @@ INSERT INTO dish (restaurant_id, name, price, description, vip_exclusive, thumbn
 VALUES (3, 'Dim Sum Platter', 51.00, 'Iberico pork dumplings, rosé champagne dumplings, scallop & prawn wontons, truffle & wild mushroom bao, hutong prawn rolls, vegetable spring rolls, wagyu beef millefeuille.', false, 'https://doordash-static.s3.amazonaws.com/media/photos/044951f0-3180-4f91-a29c-b6369b7425fb-retina-large.jpg');
 INSERT INTO dish (restaurant_id, name, price, description, vip_exclusive, thumbnail)
 VALUES (3, '川式香辣爆炒龙虾目 Hutong Lobster', 89.00, 'Wok-tossed with chilli, black beans and dried garlic', true, 'https://doordash-static.s3.amazonaws.com/media/photos/0e9d1ba8-31ab-45a0-ae1b-a36b12914600-retina-large.jpg');
-
-INSERT INTO restaurant_staff (user_id, restaurant_id, salary, role)
-VALUES (1, 2, 25000.00, 'chef');
-INSERT INTO restaurant_staff (user_id, restaurant_id, salary, role)
-VALUES (1, 3, 50000.00, 'manager');
 /** END Restaurant Data */
 
 
