@@ -59,5 +59,7 @@ VALUES (1, 3, 50000.00, 'manager');
 /** END Restaurant Data */
 
 
-/** BEGIN Order Data */
-/** END Order Data */
+/** BEGIN Feedback Data */
+INSERT INTO restaurant_rating (user_id, restaurant_id, rating, contents)
+VALUES (1, 3, 5, 'Amazing food! Definitely coming back here for all of my future formal dinners!')
+/** END Feedback Data */

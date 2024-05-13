@@ -21,6 +21,7 @@ export const RestaurantCard: React.FC<Restaurant> = ({
 	vip,
 	later: _later,
 	favorite: _favorite,
+	rating,
 }) => {
 	const router = useRouter();
 
@@ -52,6 +53,16 @@ export const RestaurantCard: React.FC<Restaurant> = ({
 					<h2 className="text-tremor-metric font-semibold text-tremor-brand-inverted">
 						{name}
 					</h2>
+					{rating ? (
+						<p className="flex items-center gap-1 text-tremor-default text-tremor-brand-inverted">
+							<RiStarFill size={15} />
+							{rating.toFixed(1)}
+						</p>
+					) : (
+						<p className="text-tremor-default text-tremor-brand-inverted">
+							No Rating
+						</p>
+					)}
 				</div>
 				<div className="absolute top-4 right-4 flex gap-2">
 					{vip ? (

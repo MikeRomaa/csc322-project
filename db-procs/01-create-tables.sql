@@ -97,7 +97,24 @@ CREATE TABLE order_item (
 /** END Order Data */
 
 
-/** BEGIN Miscellaneous */
+/** BEGIN Feedback Data */
+CREATE TABLE restaurant_rating (
+    id               INT UNSIGNED     NOT NULL AUTO_INCREMENT,
+    user_id          INT UNSIGNED     NOT NULL,
+    restaurant_id    INT UNSIGNED     NOT NULL,
+    rating           TINYINT UNSIGNED NOT NULL,
+    contents         TEXT             NOT NULL,
+    timestamp        TIMESTAMP        NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id)       REFERENCES user(id),
+    FOREIGN KEY (restaurant_id) REFERENCES restaurant(id),
+    CHECK (rating >= 1 AND rating <= 5)
+) CHARACTER SET = utf8mb4;
+/** END Feedback Data */
+
+
+/** BEGIN Miscellaneous Data */
 CREATE TABLE saved_restaurant (
     user_id       INT UNSIGNED NOT NULL,
     restaurant_id INT UNSIGNED NOT NULL,
@@ -108,4 +125,4 @@ CREATE TABLE saved_restaurant (
     FOREIGN KEY (user_id)          REFERENCES user(id),
     FOREIGN KEY (restaurant_id)    REFERENCES restaurant(id)
 ) CHARACTER SET = utf8mb4;
-/** END Miscellaneous */
+/** END Miscellaneous Data */

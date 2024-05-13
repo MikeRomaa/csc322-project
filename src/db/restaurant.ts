@@ -13,6 +13,7 @@ export interface Restaurant extends RowDataPacket {
 	vip: boolean;
 	later: boolean;
 	favorite: boolean;
+	rating: number;
 }
 
 /**
@@ -29,8 +30,6 @@ export async function getRestaurants(user_id?: number): Promise<Restaurant[]> {
             r.state AS state,
             r.zip AS zip,
             r.banner AS banner,
-            COALESCE(s.later, false) AS later,
-            COALESCE(s.favorite, false) AS favorite,
             CASE
                 WHEN :user_id IS NULL THEN false
                 WHEN (
@@ -44,12 +43,27 @@ export async function getRestaurants(user_id?: number): Promise<Restaurant[]> {
                     WHERE user_id = :user_id AND restaurant_id = r.id
                 ) > 500 THEN true
                 ELSE false
-            END AS vip
+            END AS vip,
+            COALESCE(s.later, false) AS later,
+            COALESCE(s.favorite, false) AS favorite,
+            AVG(f.rating) AS rating
         FROM restaurant AS r
+        LEFT JOIN restaurant_rating AS f
+            ON r.id = f.restaurant_id
         LEFT JOIN saved_restaurant AS s
             ON r.id = s.restaurant_id
         WHERE s.user_id = :user_id
-            OR s.user_id IS NULL`,
+            OR s.user_id IS NULL
+        GROUP BY
+            r.id,
+            r.name,
+            r.address,
+            r.city,
+            r.state,
+            r.zip,
+            r.banner,
+            s.later,
+            s.favorite`,
 		{ user_id: user_id ?? null },
 	);
 
@@ -65,8 +79,16 @@ export interface MenuItem extends RowDataPacket {
 	vip_exclusive: boolean;
 }
 
+export interface Review extends RowDataPacket {
+	author: string;
+	rating: number;
+	contents: string;
+	timestamp: number;
+}
+
 export type RestaurantDetails = Restaurant & {
 	menu: Record<number, MenuItem>;
+	reviews: Review[];
 	vip_orders: number | null;
 	vip_spent: number | null;
 };
@@ -96,25 +118,40 @@ export async function getRestaurant(
             r.state AS state,
             r.zip AS zip,
             r.banner AS banner,
-            COALESCE(s.later, false) AS later,
-            COALESCE(s.favorite, false) AS favorite,
             CASE
                 WHEN :user_id IS NULL THEN false
                 WHEN vp.orders > 50 THEN true
                 WHEN vp.spent > 500 THEN true
                 ELSE false
             END AS vip,
+            COALESCE(s.later, false) AS later,
+            COALESCE(s.favorite, false) AS favorite,
             vp.orders AS vip_orders,
-            vp.spent AS vip_spent
+            vp.spent AS vip_spent,
+            AVG(f.rating) AS rating
         FROM vip_progress AS vp
         JOIN restaurant AS r
+        LEFT JOIN restaurant_rating AS f
+            ON r.id = f.restaurant_id
         LEFT JOIN saved_restaurant AS s
             ON r.id = s.restaurant_id
         WHERE r.id = :id
             AND (
                 s.user_id = :user_id
                 OR s.user_id IS NULL
-            )`,
+            )
+        GROUP BY
+            r.id,
+            r.name,
+            r.address,
+            r.city,
+            r.state,
+            r.zip,
+            r.banner,
+            s.later,
+            s.favorite,
+            vp.orders,
+            vp.spent`,
 		{ id, user_id: user_id ?? null },
 	);
 
@@ -130,9 +167,24 @@ export async function getRestaurant(
 		{ id, vip_status: res[0].vip ? 1 : 0 },
 	);
 
+	const [reviews] = await pool.execute<Review[]>(
+		`SELECT
+            CONCAT(u.first_name, ' ', SUBSTRING(u.last_name, 1, 1), '.') AS author,
+            r.rating,
+            r.contents,
+            r.timestamp
+        FROM restaurant_rating AS r
+        JOIN user AS u
+            ON u.id = r.user_id
+        WHERE r.user_id = :user_id
+            AND r.restaurant_id = :restaurant_id`,
+		{ user_id, restaurant_id: res[0].id },
+	);
+
 	return {
 		...res[0],
 		menu: Object.fromEntries(menu.map((item) => [item.id, item])),
+		reviews,
 	};
 }
 
