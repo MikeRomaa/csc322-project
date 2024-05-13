@@ -111,6 +111,20 @@ CREATE TABLE restaurant_rating (
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(id),
     CHECK (rating >= 1 AND rating <= 5)
 ) CHARACTER SET = utf8mb4;
+
+CREATE TABLE dish_rating (
+    id               INT UNSIGNED     NOT NULL AUTO_INCREMENT,
+    user_id          INT UNSIGNED     NOT NULL,
+    dish_id          INT UNSIGNED     NOT NULL,
+    rating           TINYINT UNSIGNED NOT NULL,
+    contents         TEXT             NOT NULL,
+    timestamp        TIMESTAMP        NOT NULL DEFAULT NOW(),
+
+    PRIMARY KEY (id),
+    FOREIGN KEY (user_id) REFERENCES user(id),
+    FOREIGN KEY (dish_id) REFERENCES dish(id),
+    CHECK (rating >= 1 AND rating <= 5)
+) CHARACTER SET = utf8mb4;
 /** END Feedback Data */
 
 

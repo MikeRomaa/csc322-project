@@ -61,5 +61,8 @@ VALUES (1, 3, 50000.00, 'manager');
 
 /** BEGIN Feedback Data */
 INSERT INTO restaurant_rating (user_id, restaurant_id, rating, contents)
-VALUES (1, 3, 5, 'Amazing food! Definitely coming back here for all of my future formal dinners!')
+VALUES (1, 3, 5, 'Amazing food! Definitely coming back here for all of my future formal dinners!');
+
+INSERT INTO dish_rating (user_id, dish_id, rating, contents)
+VALUES (1, 10, 3, 'Beware if you''re sensitive to spice, this chicken is VERY spicy!')
 /** END Feedback Data */

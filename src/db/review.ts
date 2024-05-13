@@ -19,3 +19,21 @@ export async function insertRestaurantReview(
 
 	return res.insertId;
 }
+
+/**
+ * Inserts a dish review into the database.
+ */
+export async function insertDishReview(
+	user_id: number,
+	dish_id: number,
+	rating: number,
+	contents: string,
+): Promise<number> {
+	const [res] = await pool.execute<ResultSetHeader>(
+		`INSERT INTO dish_rating (user_id, dish_id, rating, contents)
+         VALUES (:user_id, :dish_id, :rating, :contents)`,
+		{ user_id, dish_id, rating, contents },
+	);
+
+	return res.insertId;
+}

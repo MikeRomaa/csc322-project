@@ -77,6 +77,7 @@ export interface MenuItem extends RowDataPacket {
 	description: string;
 	thumbnail?: string;
 	vip_exclusive: boolean;
+	rating: number;
 }
 
 export interface Review extends RowDataPacket {
@@ -160,10 +161,26 @@ export async function getRestaurant(
 	}
 
 	const [menu] = await pool.execute<MenuItem[]>(
-		`SELECT id, name, price, description, thumbnail, vip_exclusive
-        FROM dish
+		`SELECT
+            d.id AS id,
+            d.name AS name,
+            d.price AS price,
+            d.description AS description,
+            d.thumbnail AS thumbnail,
+            d.vip_exclusive AS vip_exclusive,
+            AVG(r.rating) AS rating
+        FROM dish AS d
+        LEFT JOIN dish_rating AS r
+            ON d.id = r.dish_id
         WHERE restaurant_id = :id
-            AND vip_exclusive <= :vip_status`,
+            AND vip_exclusive <= :vip_status
+        GROUP BY
+            d.id,
+            d.name,
+            d.price,
+            d.description,
+            d.thumbnail,
+            d.vip_exclusive`,
 		{ id, vip_status: res[0].vip ? 1 : 0 },
 	);
 

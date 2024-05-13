@@ -8,10 +8,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
 
+import { ReviewForm } from "@/components/ReviewForm";
 import { getRestaurant } from "@/db/restaurant";
 import { getCurrentUser } from "@/utils/cookies";
 import { Menu } from "./Menu";
-import { ReviewForm } from "./ReviewForm";
 
 interface Params {
 	params: { id: string };
@@ -95,7 +95,7 @@ const ViewRestaurant: NextPage<Params> = async ({ params: { id } }) => {
 				<Card className="col-span-3">
 					<List>
 						<ListItem>
-							<ReviewForm restaurantId={restaurant.id} />
+							<ReviewForm type="restaurant" id={restaurant.id} />
 						</ListItem>
 						{restaurant.reviews.map(
 							({ author, rating, contents, timestamp }) => (

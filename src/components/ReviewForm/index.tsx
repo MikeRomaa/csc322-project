@@ -7,35 +7,49 @@ import type React from "react";
 import { useEffect, useState } from "react";
 import { useFormState } from "react-dom";
 
-import { type State, submitReview } from "./actions";
+import {
+	type State,
+	submitDishReview,
+	submitRestaurantReview,
+} from "./actions";
 
 interface ReviewFormProps {
-	restaurantId: number;
+	id: number;
+	type: "restaurant" | "dish";
+	onClose?: () => void;
 }
 
-export const ReviewForm: React.FC<ReviewFormProps> = ({ restaurantId }) => {
+export const ReviewForm: React.FC<ReviewFormProps> = ({
+	id,
+	type,
+	onClose,
+}) => {
 	const router = useRouter();
 
-	const [state, formAction] = useFormState<State, FormData>(submitReview, {});
+	const [state, formAction] = useFormState<State, FormData>(
+		type === "restaurant" ? submitRestaurantReview : submitDishReview,
+		{},
+	);
 
 	const [rating, setRating] = useState<number>(5);
 
 	useEffect(() => {
 		if (state.data) {
+			onClose?.();
 			router.refresh();
 		}
-	}, [router, state]);
+	}, [router, state, onClose]);
 
 	return (
 		<form action={formAction}>
-			<input hidden name="restaurant_id" value={restaurantId} />
+			<input hidden name="id" value={id} />
 			<input hidden name="rating" value={rating} />
 			<div className="mb-3 flex gap-1">
 				{Array(5)
 					.fill(undefined)
 					.map((_, i) => (
 						<Button
-							// biome-ignore lint/suspicious/noArrayIndexKey: tis the only way 😔
+							// biome-ignore lint/suspicious/noArrayIndexKey: 'tis the only way 😔
 							key={i}
 							variant="light"
 							type="button"
