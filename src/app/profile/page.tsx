@@ -1,6 +1,10 @@
 "use server";
 
-import { RiArrowLeftSLine } from "@remixicon/react";
+import {
+	RiArrowLeftSLine,
+	RiEditLine,
+	RiLogoutBoxLine,
+} from "@remixicon/react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -8,7 +12,8 @@ import React from "react";
 
 import { getBalance, getTransactions } from "@/db/user";
 import { getCurrentUser } from "@/utils/cookies";
-import { Wallet } from "./Wallet";
+import { Button } from "@tremor/react";
+import { TransactionHistory } from "./(wallet)/TransactionHistory";
 
 const Profile: NextPage = async () => {
 	const user = getCurrentUser();
@@ -30,12 +35,29 @@ const Profile: NextPage = async () => {
 				</Link>
 			</div>
 
-			<h2 className="mb-10 text-tremor-metric font-medium">
+			<h2 className="mb-5 text-tremor-metric font-medium">
 				{user.first_name} {user.last_name}
 			</h2>
 
+			<div className="mb-10 flex gap-2">
+				<Button variant="secondary" size="xs">
+					<div className="flex items-center gap-2">
+						<RiEditLine size={20} />
+						Edit Profile
+					</div>
+				</Button>
+				<Link href="/auth/sign-out">
+					<Button variant="secondary" size="xs">
+						<div className="flex items-center gap-2">
+							<RiLogoutBoxLine size={20} />
+							Sign Out
+						</div>
+					</Button>
+				</Link>
+			</div>
+
 			<div className="grid grid-cols-2 gap-10">
-				<Wallet balance={balance} transactions={transactions} />
+				<TransactionHistory balance={balance} transactions={transactions} />
 			</div>
 		</main>
 	);

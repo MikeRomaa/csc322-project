@@ -1,10 +1,11 @@
 "use server";
 
-import { getBalance } from "@/db/user";
-import { getCurrentUser } from "@/utils/cookies";
 import { Badge, Button } from "@tremor/react";
 import Link from "next/link";
 import type React from "react";
+
+import { getBalance } from "@/db/user";
+import { getCurrentUser } from "@/utils/cookies";
 
 export const Navbar: React.FC = async () => {
 	const session = getCurrentUser();
@@ -27,7 +28,7 @@ export const Navbar: React.FC = async () => {
 					<p className="text-tremor-content-strong">
 						{session.first_name} {session.last_name}
 					</p>
-					<Badge>${balance.toFixed(2)}</Badge>
+					<Badge className="pointer-events-none">${balance.toFixed(2)}</Badge>
 				</Link>
 			) : (
 				<>

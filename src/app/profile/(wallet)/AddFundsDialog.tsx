@@ -6,11 +6,11 @@ import { useFormState } from "react-dom";
 
 import { type State, addFunds } from "./actions";
 
-interface FundsDialogProps {
+interface AddFundsDialogProps {
 	onClose: () => void;
 }
 
-export const FundsDialog: React.FC<FundsDialogProps> = ({ onClose }) => {
+export const AddFundsDialog: React.FC<AddFundsDialogProps> = ({ onClose }) => {
 	const router = useRouter();
 
 	const [state, formAction] = useFormState<State, FormData>(addFunds, {});

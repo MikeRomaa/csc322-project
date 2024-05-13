@@ -6,14 +6,17 @@ import type React from "react";
 import { useState } from "react";
 
 import type { Transaction } from "@/db/user";
-import { FundsDialog } from "./FundsDialog";
+import { AddFundsDialog } from "./AddFundsDialog";
 
-interface WalletProps {
+interface TransactionHistoryProps {
 	balance: number;
 	transactions: Transaction[];
 }
 
-export const Wallet: React.FC<WalletProps> = ({ balance, transactions }) => {
+export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
+	balance,
+	transactions,
+}) => {
 	const [showDialog, setShowDialog] = useState<boolean>(false);
 
 	return (
@@ -54,7 +57,7 @@ export const Wallet: React.FC<WalletProps> = ({ balance, transactions }) => {
 			</Card>
 
 			<Dialog static open={showDialog} onClose={() => setShowDialog(false)}>
-				<FundsDialog onClose={() => setShowDialog(false)} />
+				<AddFundsDialog onClose={() => setShowDialog(false)} />
 			</Dialog>
 		</>
 	);
