@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import React from "react";
 
 import { getRestaurant } from "@/db/restaurant";
+import { getCurrentUser } from "@/utils/cookies";
 import { Menu } from "./Menu";
 
 interface Params {
@@ -22,7 +23,9 @@ const ViewRestaurant: NextPage<Params> = async ({ params: { id } }) => {
 		return notFound();
 	}
 
-	const restaurant = await getRestaurant(idNum);
+	const user = getCurrentUser();
+
+	const restaurant = await getRestaurant(idNum, user?.id);
 	if (restaurant === null) {
 		return notFound();
 	}
@@ -55,7 +58,7 @@ const ViewRestaurant: NextPage<Params> = async ({ params: { id } }) => {
 
 			<Divider />
 
-			<Menu restaurant_id={idNum} items={menu} />
+			<Menu restaurant={restaurant} items={menu} />
 		</main>
 	);
 };

@@ -1,5 +1,6 @@
 "use server";
 
+import { RiBookmarkFill, RiGlobalLine, RiStarFill } from "@remixicon/react";
 import {
 	MultiSelect,
 	MultiSelectItem,
@@ -11,11 +12,13 @@ import {
 import type { NextPage } from "next";
 
 import { getRestaurants } from "@/db/restaurant";
-import { RiBookmarkFill, RiGlobalLine, RiStarFill } from "@remixicon/react";
+import { getCurrentUser } from "@/utils/cookies";
 import { RestaurantCard } from "./RestaurantCard";
 
 const Home: NextPage = async () => {
-	const restaurants = await getRestaurants();
+	const user = getCurrentUser();
+
+	const restaurants = await getRestaurants(user?.id);
 
 	return (
 		<main>

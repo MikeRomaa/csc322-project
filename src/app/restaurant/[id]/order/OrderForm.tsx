@@ -23,7 +23,7 @@ import { useFormState } from "react-dom";
 
 import { AddressDialog } from "@/components/AddressDialog";
 import type { User } from "@/db/auth";
-import type { MenuItem, RestaurantWithMenu } from "@/db/restaurant";
+import type { MenuItem, RestaurantDetails } from "@/db/restaurant";
 import type { Address } from "@/db/user";
 import { type State, placeOrder } from "./actions";
 
@@ -35,7 +35,7 @@ enum DeliveryType {
 interface OrderFormProps {
 	user: User;
 	addresses: Address[];
-	restaurant: RestaurantWithMenu;
+	restaurant: RestaurantDetails;
 	order: Record<number, number>;
 }
 
@@ -278,13 +278,22 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 									${(deliveryType === DeliveryType.Delivery ? 5 : 0).toFixed(2)}
 								</span>
 							</ListItem>
+							{restaurant.vip ? (
+								<ListItem>
+									<span>VIP Discount</span>
+									<span className="font-medium text-tremor-content-emphasis">
+										-${(subtotal * 0.1).toFixed(2)}
+									</span>
+								</ListItem>
+							) : null}
 							<ListItem>
 								<span>Total</span>
 								<span className="font-bold text-tremor-title text-tremor-content-emphasis">
 									$
 									{(
 										subtotal * 1.0875 +
-										(deliveryType === DeliveryType.Delivery ? 5 : 0)
+										(deliveryType === DeliveryType.Delivery ? 5 : 0) -
+										(restaurant.vip ? subtotal * 0.1 : 0)
 									).toFixed(2)}
 								</span>
 							</ListItem>

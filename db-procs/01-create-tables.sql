@@ -58,6 +58,7 @@ CREATE TABLE dish (
     price         DECIMAL(5,2) NOT NULL,
     description   TEXT         NOT NULL,
     thumbnail     TEXT         NULL,
+    vip_exclusive BOOLEAN      NOT NULL DEFAULT false,
 
     PRIMARY KEY (id),
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(id)
@@ -72,6 +73,7 @@ CREATE TABLE food_order (
     restaurant_id    INT UNSIGNED NOT NULL,
     billing_address  INT UNSIGNED NOT NULL,
     delivery_address INT UNSIGNED NULL,
+    vip_discount     BOOLEAN      NOT NULL DEFAULT false,
     timestamp        TIMESTAMP    NOT NULL DEFAULT NOW(),
     status           ENUM('placed', 'picked_up', 'delivered', 'cancelled') NOT NULL DEFAULT 'placed',
 

@@ -18,7 +18,7 @@ export async function insertOrder(
 	delivery_address: number | null,
 	items: Record<number, number>,
 ): Promise<number | null> {
-	const restaurant = await getRestaurant(restaurant_id);
+	const restaurant = await getRestaurant(restaurant_id, user_id);
 	if (restaurant === null) {
 		throw new Error("wat.");
 	}
@@ -28,9 +28,15 @@ export async function insertOrder(
 
 	// Save the actual order information
 	const [res] = await connection.execute<ResultSetHeader>(
-		`INSERT INTO food_order (user_id, restaurant_id, billing_address, delivery_address)
-        VALUES (:user_id, :restaurant_id, :billing_address, :delivery_address)`,
-		{ user_id, restaurant_id, billing_address, delivery_address },
+		`INSERT INTO food_order (user_id, restaurant_id, billing_address, delivery_address, vip_discount)
+        VALUES (:user_id, :restaurant_id, :billing_address, :delivery_address, :vip_discount)`,
+		{
+			user_id,
+			restaurant_id,
+			billing_address,
+			delivery_address,
+			vip_discount: restaurant.vip,
+		},
 	);
 
 	const order_id = res.insertId;
@@ -53,15 +59,7 @@ export async function insertOrder(
 
 	// Compute total price for the order
 	const [total] = await connection.execute<Total[]>(
-		`WITH subtotal AS (
-            SELECT SUM(price * quantity) AS subtotal
-            FROM order_item
-            WHERE order_id = :order_id
-        )
-        SELECT subtotal * 1.0875 + IF(delivery_address IS NULL, 0, 5) AS value
-        FROM subtotal
-        JOIN food_order
-        WHERE id = :order_id`,
+		"SELECT get_order_total(:order_id) AS value",
 		{ order_id },
 	);
 
@@ -105,11 +103,7 @@ export async function getOrders(user_id: number): Promise<Order[]> {
             r.name AS restaurant,
             o.timestamp AS timestamp,
             o.status AS status,
-            (
-                SELECT SUM(price * quantity) AS subtotal
-                FROM order_item
-                WHERE order_id = o.id
-            ) * 1.0875 + IF(o.delivery_address IS NULL, 0, 5) AS total
+            get_order_total(o.id) AS total
         FROM food_order AS o
         JOIN restaurant AS r
             ON r.id = o.restaurant_id

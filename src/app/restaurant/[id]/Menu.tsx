@@ -18,15 +18,15 @@ import { useRouter } from "next/navigation";
 import type React from "react";
 import { useCallback, useEffect, useState } from "react";
 
-import type { MenuItem } from "@/db/restaurant";
+import type { MenuItem, RestaurantDetails } from "@/db/restaurant";
 import { MenuItemCard } from "./MenuItemCard";
 
 interface MenuProps {
-	restaurant_id: number;
+	restaurant: RestaurantDetails;
 	items: Record<number, MenuItem>;
 }
 
-export const Menu: React.FC<MenuProps> = ({ restaurant_id, items }) => {
+export const Menu: React.FC<MenuProps> = ({ restaurant, items }) => {
 	const router = useRouter();
 
 	const [basket, setBasket] = useState<Map<number, number>>(new Map());
@@ -54,8 +54,8 @@ export const Menu: React.FC<MenuProps> = ({ restaurant_id, items }) => {
 	const order = useCallback(() => {
 		const data = Object.fromEntries(basket.entries());
 		const encodedData = window.btoa(JSON.stringify(data));
-		router.push(`/restaurant/${restaurant_id}/order?data=${encodedData}`);
-	}, [router, restaurant_id, basket]);
+		router.push(`/restaurant/${restaurant.id}/order?data=${encodedData}`);
+	}, [router, restaurant, basket]);
 
 	useEffect(() => {
 		if (basket.size === 0) {
@@ -65,6 +65,25 @@ export const Menu: React.FC<MenuProps> = ({ restaurant_id, items }) => {
 
 	return (
 		<>
+			{restaurant.vip ? (
+				<div className="mb-10">
+					<h3 className="mb-1 text-tremor-title font-medium">
+						✨ VIP Exclusives
+					</h3>
+					<p className="mb-5 text-tremor-content text-tremor-default">
+						Sweet! Your VIP status at <b>{restaurant.name}</b> earns you access
+						to these exclusive menu items!
+					</p>
+					<div className="grid grid-cols-2 gap-5">
+						{Object.values(items)
+							.filter(({ vip_exclusive }) => vip_exclusive)
+							.map((item) => (
+								<MenuItemCard key={item.id} item={item} addItem={addItem} />
+							))}
+					</div>
+				</div>
+			) : null}
+
 			<div className="mb-5 flex items-center">
 				<h3 className="text-tremor-title font-medium">Menu</h3>
 				{basket.size > 0 && (

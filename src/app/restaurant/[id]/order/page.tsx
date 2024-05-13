@@ -33,7 +33,7 @@ const PlaceOrder: NextPage<Params> = async ({
 		return notFound();
 	}
 
-	const restaurant = await getRestaurant(idNum);
+	const restaurant = await getRestaurant(idNum, user.id);
 	if (restaurant === null) {
 		return notFound();
 	}
@@ -52,48 +52,50 @@ const PlaceOrder: NextPage<Params> = async ({
 
 			<Divider />
 
-			<div className="mb-10 grid grid-cols-3 items-center gap-10">
-				<div className="text-tremor-content text-tremor-default">
-					<p className="mb-2">
-						You're getting really close to{" "}
-						<span className="font-medium">✨ VIP Status ✨</span>!
-					</p>
-					<p className="mb-2">
-						With VIP, you get 10% of all orders at{" "}
-						<span className="font-medium">{restaurant.name}</span>, as well as
-						access to exclusive menu items!
-					</p>
-					<p>Consider adding more items to reach VIP sooner!</p>
+			{!restaurant.vip && (
+				<div className="mb-10 grid grid-cols-3 items-center gap-10">
+					<div className="text-tremor-content text-tremor-default">
+						<p className="mb-2">
+							You're getting really close to{" "}
+							<span className="font-medium">✨ VIP Status ✨</span>!
+						</p>
+						<p className="mb-2">
+							With VIP, you get 10% of all orders at{" "}
+							<span className="font-medium">{restaurant.name}</span>, as well as
+							access to exclusive menu items!
+						</p>
+						<p>Consider adding more items to reach VIP sooner!</p>
+					</div>
+					<Card>
+						<div className="flex justify-start space-x-5 items-center">
+							<VipProgressCircle progress={(restaurant.vip_spent ?? 0) / 500} />
+							<div>
+								<p className="text-tremor-default text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
+									${restaurant.vip_spent?.toFixed(0)}/$500
+								</p>
+								<p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+									spent until{" "}
+									<span className="font-medium">✨ VIP Status ✨</span>
+								</p>
+							</div>
+						</div>
+					</Card>
+					<Card>
+						<div className="flex justify-start space-x-5 items-center">
+							<VipProgressCircle progress={(restaurant.vip_orders ?? 0) / 50} />
+							<div>
+								<p className="text-tremor-default text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
+									{restaurant.vip_orders}/50
+								</p>
+								<p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
+									orders until{" "}
+									<span className="font-medium">✨ VIP Status ✨</span>
+								</p>
+							</div>
+						</div>
+					</Card>
 				</div>
-				<Card>
-					<div className="flex justify-start space-x-5 items-center">
-						<VipProgressCircle progress={0.75} />
-						<div>
-							<p className="text-tremor-default text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
-								$375/$500
-							</p>
-							<p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-								spent until{" "}
-								<span className="font-medium">✨ VIP Status ✨</span>
-							</p>
-						</div>
-					</div>
-				</Card>
-				<Card>
-					<div className="flex justify-start space-x-5 items-center">
-						<VipProgressCircle progress={0.26} />
-						<div>
-							<p className="text-tremor-default text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
-								13/50
-							</p>
-							<p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
-								orders until{" "}
-								<span className="font-medium">✨ VIP Status ✨</span>
-							</p>
-						</div>
-					</div>
-				</Card>
-			</div>
+			)}
 
 			<OrderForm
 				user={user}
