@@ -71,7 +71,7 @@ const PlaceOrder: NextPage<Params> = async ({
 							<VipProgressCircle progress={(restaurant.vip_spent ?? 0) / 500} />
 							<div>
 								<p className="text-tremor-default text-tremor-content-strong dark:text-dark-tremor-content-strong font-medium">
-									${restaurant.vip_spent?.toFixed(0)}/$500
+									${restaurant.vip_spent?.toFixed(0) ?? 0}/$500
 								</p>
 								<p className="text-tremor-default text-tremor-content dark:text-dark-tremor-content">
 									spent until{" "}

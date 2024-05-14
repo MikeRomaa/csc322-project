@@ -280,7 +280,7 @@ export const OrderForm: React.FC<OrderFormProps> = ({
 							</ListItem>
 							{restaurant.vip ? (
 								<ListItem>
-									<span>VIP Discount</span>
+									<span>VIP Discount (10%)</span>
 									<span className="font-medium text-tremor-content-emphasis">
 										-${(subtotal * 0.1).toFixed(2)}
 									</span>

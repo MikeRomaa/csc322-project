@@ -5,7 +5,7 @@ import {
 	RiEditLine,
 	RiLogoutBoxLine,
 } from "@remixicon/react";
-import { Button } from "@tremor/react";
+import { Button, Card } from "@tremor/react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
