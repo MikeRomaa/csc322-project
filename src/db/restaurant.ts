@@ -193,9 +193,8 @@ export async function getRestaurant(
         FROM restaurant_rating AS r
         JOIN user AS u
             ON u.id = r.user_id
-        WHERE r.user_id = :user_id
-            AND r.restaurant_id = :restaurant_id`,
-		{ user_id, restaurant_id: res[0].id },
+        WHERE r.restaurant_id = :restaurant_id`,
+		{ restaurant_id: res[0].id },
 	);
 
 	return {

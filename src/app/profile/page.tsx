@@ -1,11 +1,7 @@
 "use server";
 
-import {
-	RiArrowLeftSLine,
-	RiEditLine,
-	RiLogoutBoxLine,
-} from "@remixicon/react";
-import { Button, Card } from "@tremor/react";
+import { RiArrowLeftSLine, RiEditLine } from "@remixicon/react";
+import { Button } from "@tremor/react";
 import type { NextPage } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
@@ -16,6 +12,7 @@ import { getBalance, getTransactions } from "@/db/user";
 import { getCurrentUser } from "@/utils/cookies";
 import { OrderHistory } from "./(orders)/OrderHistory";
 import { TransactionHistory } from "./(wallet)/TransactionHistory";
+import { SignOutButton } from "./SignOutButton";
 
 const Profile: NextPage = async () => {
 	const user = getCurrentUser();
@@ -50,14 +47,7 @@ const Profile: NextPage = async () => {
 						Edit Profile
 					</div>
 				</Button>
-				<Link href="/auth/sign-out">
-					<Button variant="secondary" size="xs">
-						<div className="flex items-center gap-2">
-							<RiLogoutBoxLine size={20} />
-							Sign Out
-						</div>
-					</Button>
-				</Link>
+				<SignOutButton />
 			</div>
 
 			<div className="grid grid-cols-2 gap-10 items-start">
